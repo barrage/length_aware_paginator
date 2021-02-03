@@ -13,7 +13,7 @@ impl<T> Paginate for T {
     fn page(self, page: i64) -> PaginatedQuery<Self> {
         PaginatedQuery {
             query: self,
-            per_page: crate::DEFAULT_ITEMS_PER_PAGE,
+            per_page: 15,
             page,
         }
     }
@@ -52,8 +52,8 @@ impl<T> PaginatedQuery<T> {
     where
         Self: LoadQuery<PgConnection, (U, i64)>,
     {
-        let page = self.page.clone();
-        let per_page = self.per_page.clone();
+        let page = self.page;
+        let per_page = self.per_page;
         let results = self.load::<(U, i64)>(conn)?;
         let total = results.get(0).map(|x| x.1).unwrap_or(0);
         let data = results.into_iter().map(|x| x.0).collect();
