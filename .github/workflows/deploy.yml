@@ -1,0 +1,36 @@
+name: Deploy-Rust
+
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the master branch
+  push:
+    tags: 
+      - '*'
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run tests
+      run: cargo test --verbose && cargo clippy
+
+  deploy:
+
+    needs: test
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to Crates.io and deploy the package
+      env:
+          TOKEN: ${{secrets.CRATES_IO_TOKEN}}
+      run: |
+        cargo login $TOKEN
+        cargo publish
