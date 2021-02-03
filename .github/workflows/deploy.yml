@@ -30,9 +30,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Run tests
-      env:
-        DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
-      run: PGPASSWORD=postgres && psql -U postgres -d postgres -f tests/db.sql && cargo test --verbose && cargo clippy
+      run: |
+        export DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres && \
+        export PGPASSWORD=postgres && \
+        psql -U postgres -d postgres -f tests/db.sql && \
+        cargo test --verbose && cargo clippy
 
   deploy:
 
