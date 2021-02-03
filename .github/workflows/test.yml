@@ -31,5 +31,5 @@ jobs:
       run: |
         export DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres && \
         export PGPASSWORD=postgres && \
-        psql -U postgres -d postgres -f tests/db.sql && \
+        psql -h localhost -p 5432 -U postgres -d postgres -f tests/db.sql && \
         cargo test --verbose && cargo clippy
