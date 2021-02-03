@@ -15,9 +15,6 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    container:
-      image:  rust:nightly
-
     services:
       postgres:
         image: postgres:latest
@@ -35,8 +32,7 @@ jobs:
     - name: Run tests
       env:
         DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
-    - run: PGPASSWORD=postgres && psql -U postgres -d postgres -f tests/db.sql
-    - run: cargo test --verbose && cargo clippy
+      run: PGPASSWORD=postgres && psql -U postgres -d postgres -f tests/db.sql && cargo test --verbose && cargo clippy
 
   deploy:
 
