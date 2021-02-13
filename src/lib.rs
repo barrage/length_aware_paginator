@@ -1,4 +1,4 @@
-//! Lenght aware paginator enables you to paginate Diesel queries and have information about the lenght
+//! Length aware paginator enables you to paginate Diesel queries and have information about the length
 //! of data being paginated. It will give you total number of items, and last page that you can navigate to
 //! and still get some kind of data.
 //!
@@ -8,7 +8,7 @@
 //! use diesel::pg::PgConnection;
 //! use diesel::Connection;
 //! use diesel::QueryDsl;
-//! use lenght_aware_paginator::{LoadPaginated, Response};
+//! use length_aware_paginator::{LoadPaginated, Response};
 //! use serde::{Deserialize, Serialize};
 //!
 //! /// Get the database connection
@@ -46,9 +46,9 @@
 //! fn test_orm_query_pagination() {
 //!     let connection = get_connection();
 //!
-//!     // Use `lenght_aware_paginator::LoadPaginated` trait to enable
+//!     // Use `length_aware_paginator::LoadPaginated` trait to enable
 //!     // using the `load_paginated` method on your query.
-//!     // Your query will return `lenght_aware_paginator::Response<T>` struct
+//!     // Your query will return `length_aware_paginator::Response<T>` struct
 //!     let response: Response<User> = schema::users::table
 //!         .into_boxed()
 //!         .load_paginated(connection, page, per_page)

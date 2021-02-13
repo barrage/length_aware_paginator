@@ -1,9 +1,9 @@
-[![Crates.io](https://img.shields.io/crates/v/lenght_aware_paginator.svg)](https://crates.io/crates/lenght_aware_paginator)
+[![Crates.io](https://img.shields.io/crates/v/length_aware_paginator.svg)](https://crates.io/crates/length_aware_paginator)
 
 # {{crate}}
 
 ```toml
-lenght_aware_paginator = "{{version}}"
+length_aware_paginator = "{{version}}"
 ```
 
 {{readme}}
