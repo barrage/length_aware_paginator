@@ -4,7 +4,7 @@ extern crate diesel;
 use diesel::pg::PgConnection;
 use diesel::Connection;
 use diesel::QueryDsl;
-use lenght_aware_paginator::{LoadPaginated, Response};
+use length_aware_paginator::{LoadPaginated, Response};
 use serde::{Deserialize, Serialize};
 
 /// Get the database connection
@@ -45,9 +45,9 @@ fn get_paginated_users(
     page: Option<i64>,
     per_page: Option<i64>,
 ) -> Response<User> {
-    // Use `lenght_aware_paginator::LoadPaginated` trait to enable
+    // Use `length_aware_paginator::LoadPaginated` trait to enable
     // using the `load_paginated` method on your query.
-    // Your query will return `lenght_aware_paginator::Response<T>` struct
+    // Your query will return `length_aware_paginator::Response<T>` struct
     users::table
         .into_boxed()
         .load_paginated(connection, page, per_page)
