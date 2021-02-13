@@ -1,11 +1,11 @@
 [package]
-name = "lenght_aware_paginator"
+name = "length_aware_paginator"
 version = "0.1.0"
 authors = ["Tibor Hudik <tibor@barrage.net>"]
 edition = "2018"
 license = "MIT"
 keywords = ["pagination", "diesel", "paginate", "per_page", "page"]
-description = "Add functionality to diesel query builder to return lenght aware paginated response"
+description = "Add functionality to diesel query builder to return length aware paginated response"
 homepage = "https://www.barrage.net"
 repository = "https://github.com/barrage/lenght_aware_paginator"
 
