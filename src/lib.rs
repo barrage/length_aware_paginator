@@ -8,7 +8,7 @@
 //! use diesel::pg::PgConnection;
 //! use diesel::Connection;
 //! use diesel::QueryDsl;
-//! use length_aware_paginator::{LoadPaginated, Response};
+//! use length_aware_paginator::{Paginate, Response};
 //! use serde::{Deserialize, Serialize};
 //!
 //! /// Get the database connection
@@ -44,14 +44,16 @@
 //!
 //! #[test]
 //! fn test_orm_query_pagination() {
-//!     let connection = get_connection();
+//!     let mut connection = get_connection();
 //!
 //!     // Use `length_aware_paginator::LoadPaginated` trait to enable
 //!     // using the `load_paginated` method on your query.
 //!     // Your query will return `length_aware_paginator::Response<T>` struct
 //!     let response: Response<User> = schema::users::table
 //!         .into_boxed()
-//!         .load_paginated(connection, page, per_page)
+//!         .page(Some(1))
+//!         .per_page(Some(10))
+//!         .load_paginated(&mut connection)
 //!         .unwrap();
 //!
 //!     assert_eq!(response.page, 1);
@@ -61,11 +63,6 @@
 //!     assert_eq!(response.data.len(), 10);
 //! }
 //! ```
-//!
-//! ### Limitations
-//!
-//! Unfortunatelly this is still not implemented to work with `sql_query()` due to its own limitations.
-//! Maybe in the future I'll update this package to enable this.
 
 #[macro_use]
 extern crate diesel;
@@ -74,4 +71,4 @@ mod structs;
 mod traits;
 
 pub use structs::Response;
-pub use traits::{LoadPaginated, Paginate};
+pub use traits::Paginate;

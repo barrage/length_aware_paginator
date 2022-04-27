@@ -3,8 +3,8 @@ name: Test-Rust
 on:
   # Trigger the workflow on every branch
   push:
-    branches: 
-      - '*'
+    branches:
+      - "*"
   pull_request:
     branches:
       - master
@@ -24,14 +24,14 @@ jobs:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
         ports:
-        - 5432:5432
+          - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Run tests
-      run: |
-        export DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres && \
-        export PGPASSWORD=postgres && \
-        psql -h localhost -p 5432 -U postgres -d postgres -f tests/db.sql && \
-        cargo test --verbose && cargo clippy
+      - uses: actions/checkout@v2
+      - name: Run tests
+        run: |
+          export DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres && \
+          export PGPASSWORD=postgres && \
+          psql -h localhost -p 5432 -U postgres -d postgres -f tests/db.sql && \
+          cargo test --verbose && cargo clippy

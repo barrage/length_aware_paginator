@@ -4,7 +4,7 @@ extern crate diesel;
 use diesel::pg::PgConnection;
 use diesel::Connection;
 use diesel::QueryDsl;
-use length_aware_paginator::{LoadPaginated, Response};
+use length_aware_paginator::{Paginate, Response};
 use serde::{Deserialize, Serialize};
 
 /// Get the database connection
@@ -38,27 +38,16 @@ pub struct User {
     password: String,
 }
 
-/// Return paginated object with users
-/// *panics* if any errors are returned by the query
-fn get_paginated_users(
-    connection: &PgConnection,
-    page: Option<i64>,
-    per_page: Option<i64>,
-) -> Response<User> {
-    // Use `length_aware_paginator::LoadPaginated` trait to enable
-    // using the `load_paginated` method on your query.
-    // Your query will return `length_aware_paginator::Response<T>` struct
-    users::table
-        .into_boxed()
-        .load_paginated(connection, page, per_page)
-        .unwrap()
-}
-
 #[test]
 fn test_orm_query_pagination() {
-    let connection = get_connection();
+    let mut connection = get_connection();
 
-    let response: Response<User> = get_paginated_users(&connection, Some(1), Some(10));
+    let response: Response<User> = users::table
+        .into_boxed()
+        .page(Some(1))
+        .per_page(Some(10))
+        .paginate::<User>(&mut connection)
+        .unwrap();
 
     assert_eq!(response.page, 1);
     assert_eq!(response.per_page, 10);
@@ -67,14 +56,38 @@ fn test_orm_query_pagination() {
     assert_eq!(response.data.len(), 10);
 }
 
-// TODO: Figure out a way to make this happen...
-// #[test]
-// fn test_sql_query_pagination() {
-//     let connection = get_connection();
+#[test]
+fn test_orm_query_pagination_per_page_first() {
+    let mut connection = get_connection();
 
-//     let response: Response<User> = diesel::sql_query("SELECT * FROM users")
-//         .load_paginated(&connection, Some(1), Some(2))
-//         .unwrap();
+    let response: Response<User> = users::table
+        .into_boxed()
+        .per_page(Some(10))
+        .page(Some(1))
+        .paginate::<User>(&mut connection)
+        .unwrap();
 
-//     assert_eq!(response.page, 1);
-// }
+    assert_eq!(response.page, 1);
+    assert_eq!(response.per_page, 10);
+    assert_eq!(response.total, 15);
+    assert_eq!(response.last_page, 2);
+    assert_eq!(response.data.len(), 10);
+}
+
+#[test]
+fn test_orm_query_pagination_second_page() {
+    let mut connection = get_connection();
+
+    let response: Response<User> = users::table
+        .into_boxed()
+        .page(Some(2))
+        .per_page(Some(10))
+        .paginate::<User>(&mut connection)
+        .unwrap();
+
+    assert_eq!(response.page, 2);
+    assert_eq!(response.per_page, 10);
+    assert_eq!(response.total, 15);
+    assert_eq!(response.last_page, 2);
+    assert_eq!(response.data.len(), 5);
+}
